@@ -100,7 +100,8 @@ jobs:
 
       # Cloudflare installs the Hugo that Production HUGO_VERSION names and runs
       # the one .tool-versions names; a mismatch fails the production build.
-      # The workflow can't read Cloudflare, so it asks. Retired by #40.
+      # The workflow can't read Cloudflare, so it asks. Replace with a real check
+      # if the Cloudflare config ever moves to infrastructure as code.
       - name: Require the Hugo version gate
         env:
           CONFIRMED: ${{ inputs.hugo_version_set_in_production }}

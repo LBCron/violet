@@ -2,7 +2,7 @@
 
 Reference document for the Cloudflare setup for `ontariomenopauseclinic.ca`.
 
-None of this configuration is infrastructure as code. Moving it there is exploratory work in [#40](https://github.com/timgladwell/violet/issues/40). Until then, `./export-cloudflare.sh` is the continuity plan: it dumps the live config to [`cloudflare-export/`](cloudflare-export/), which is committed.
+None of this configuration is infrastructure as code, so `./export-cloudflare.sh` is the continuity plan: it dumps the live config to [`cloudflare-export/`](cloudflare-export/), which is committed.
 
 **Which file to trust:** [`cloudflare-export/SUMMARY.md`](cloudflare-export/) is generated from the API and is authoritative for *what is configured*. This document is hand-written and is authoritative for *why* — the reasoning, the failure modes, and the decisions that are not recoverable from a config dump. When they disagree, the export is right about the facts and this file needs updating.
 
@@ -53,8 +53,7 @@ The export also **probes for features nobody recorded** (email routing, page rul
 Cloudflare signs the zone, and the DS record at the registry is what makes
 validating resolvers (1.1.1.1 and 8.8.8.8 among them) trust the signatures.
 Every answer they return for this zone, the website and the Microsoft 365 mail
-records alike, is authenticated. DNS-AID, if it is ever published, depends on
-this ([#189](https://github.com/timgladwell/violet/issues/189)).
+records alike, is authenticated.
 
 **Turning it off, or moving the zone to another DNS provider, starts with the
 DS record, not the signing.** If Cloudflare stops signing while the DS record

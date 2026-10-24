@@ -9,8 +9,8 @@
 #   records, the www-to-apex redirect rule, zone settings, and the Pages project
 #   (custom domains, build config). Losing the account, or rebuilding the site
 #   from scratch, means recreating all of it by hand. This export is the record
-#   to rebuild from. The configuration is not infrastructure as code (that is
-#   exploratory, #40), so this script is the continuity plan.
+#   to rebuild from. The configuration is not infrastructure as code, so this
+#   script is the continuity plan.
 #
 #   A previous version of this script was never committed and is gone. That is
 #   the reason it now lives here rather than in someone's home directory.
@@ -186,7 +186,7 @@ if [[ -n "$ACCOUNT_ID" ]]; then
     # Redact before anything touches the working tree: the raw response contains
     # env var VALUES (booking URL, contact addresses). Only allowlisted values are
     # kept; any other var, including new ones, records as "(redacted)".
-    # shortcut: hand-kept allowlist, retired if infrastructure as code ever owns env vars (#40).
+    # shortcut: hand-kept allowlist; replace if env vars ever move to infrastructure as code.
     jq '{result: [.result[] | {
           name, subdomain, production_branch, created_on,
           build_config,
