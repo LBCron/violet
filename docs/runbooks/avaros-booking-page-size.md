@@ -14,7 +14,9 @@ every morning into `a11y/fixtures/avaros-landing.json`, which
 `a11y/booking.spec.ts` uses as a stand-in for the iframe on every test run. It
 finds the booking URL on production's `/book/`, falling back to staging, and
 fails with an error if both are in maintenance mode. On any change it opens, or
-updates, an **"Avaros booking page changed size"** PR.
+updates, an **"Avaros booking page changed size"** PR. Until that PR is merged
+or closed, each morning's run re-tests it against `main` and comments the
+verdict on it as a reminder.
 
 ## Pre-checks
 

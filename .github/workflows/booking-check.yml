@@ -7,6 +7,8 @@ name: Booking Check
 # booking tests against the new measurements and open (or update) a PR with
 # the new fixture, requesting the repo owner's review; if the frame no longer
 # fits, also fail this run, which emails whoever last edited the cron line.
+# While that PR is open and Avaros hasn't changed again, each run comments on
+# it instead, with the day's verdict: a daily reminder to deal with it.
 #
 # PRs opened with GITHUB_TOKEN don't trigger other workflows (see #145), so
 # this job runs the booking tests itself and reports the result in the PR.
@@ -103,13 +105,40 @@ jobs:
 
       - name: Open or update the measurements PR
         if: steps.measure.outputs.changed
+        # "changed" is measured against main, so while a PR is open every run
+        # still re-tests against today's main. If the samples match the open
+        # PR's, nothing new happened in Avaros: comment as a daily reminder
+        # rather than committing a timestamp-only change.
+        #
         # Commits through the contents API so GitHub signs them; main requires
         # signed commits. An open PR's branch is added to, never reset, so a
         # fix pushed to it by hand survives the next run.
         run: |
           repo=${{ github.repository }}
+          run_url="${{ github.server_url }}/$repo/actions/runs/${{ github.run_id }}"
+          if [ "${{ steps.test.outputs.fits }}" = "true" ]; then
+            verdict="✅ The booking button still fits inside the frame at every tested size."
+          else
+            verdict="❌ **The booking button no longer fits inside the frame.** Raise the frame height in \`site/assets/css/main.css\` on this branch until the booking tests pass, then merge and release."
+          fi
+
           pr=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
-          if [ -z "$pr" ]; then
+          if [ -n "$pr" ]; then
+            pr_samples=$(gh api "repos/$repo/contents/$FIXTURE?ref=$BRANCH" --jq .content | base64 -d | jq -c .samples)
+            if [ "$pr_samples" = "$(jq -c .samples "$FIXTURE")" ]; then
+              {
+                echo "🤖 *Posted by the Booking Check workflow.*"
+                echo
+                echo "**The production Avaros booking page has changed, and this PR is still open.** The details are in the PR description. Please look at it as soon as possible, so a change in Avaros can't hide the \"Book an appointment\" button from clients again (#165)."
+                echo
+                echo "Re-tested today against \`main\`: $verdict"
+                echo
+                echo "Booking tests run: $run_url"
+              } > comment.md
+              gh pr comment "$pr" --body-file comment.md
+              exit 0
+            fi
+          else
             main=$(gh api "repos/$repo/git/ref/heads/main" --jq .object.sha)
             gh api -X PATCH "repos/$repo/git/refs/heads/$BRANCH" -f sha="$main" -F force=true >/dev/null 2>&1 \
               || gh api "repos/$repo/git/refs" -f ref="refs/heads/$BRANCH" -f sha="$main" >/dev/null
@@ -119,11 +148,6 @@ jobs:
             -f message="Update Avaros landing page measurements" \
             -f content="$(base64 -w0 "$FIXTURE")" -f sha="$sha" -f branch="$BRANCH" >/dev/null
 
-          if [ "${{ steps.test.outputs.fits }}" = "true" ]; then
-            verdict="✅ The booking button still fits inside the frame at every tested size."
-          else
-            verdict="❌ **The booking button no longer fits inside the frame.** Raise the frame height in \`site/assets/css/main.css\` on this branch until the booking tests pass, then merge and release."
-          fi
           {
             echo "🤖 *Opened by the Booking Check workflow.*"
             echo
@@ -135,7 +159,7 @@ jobs:
             grep -v -x -e changed -e unchanged measure.log
             echo '```'
             echo
-            echo "Booking tests run: ${{ github.server_url }}/$repo/actions/runs/${{ github.run_id }}"
+            echo "Booking tests run: $run_url"
           } > body.md
           # Review request + assignment email the owner on every change, pass or
           # fail; the failed-run email alone only reaches one person.
