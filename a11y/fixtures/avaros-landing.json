@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-10-18T21:04:14.141Z",
+  "measuredAt": "2026-11-05T18:26:01.398Z",
   "samples": [
     {
       "width": 260,
@@ -148,10 +148,10 @@
     {
       "width": 620,
       "buttonLeft": 25,
-      "buttonTop": 539,
+      "buttonTop": 557,
       "buttonRight": 595,
-      "buttonBottom": 582,
-      "height": 611
+      "buttonBottom": 600,
+      "height": 629
     },
     {
       "width": 640,
