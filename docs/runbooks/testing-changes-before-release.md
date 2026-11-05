@@ -26,7 +26,7 @@ slot; [Deploying to Staging](deploying-to-staging.md) explains the slots.
    ```
 
    This loads every page (the a11y suite's list, plus a 404) at desktop and
-   phone widths, and both modals, on production and on staging. For every
+   phone widths, and the quiz modal, on production and on staging. For every
    element except the staging banner it compares box size and the computed
    properties listed in `scripts/compare-sites.mjs`, then prints each distinct
    difference with where it appears. Screenshots of every state land in
@@ -70,8 +70,7 @@ slot; [Deploying to Staging](deploying-to-staging.md) explains the slots.
 4. **Check on real browsers** for anything layout, font or booking related. The
    comparison runs Chromium only. At minimum: Safari on an iPhone, Safari and
    Firefox on a desktop. The booking iframe is cross-origin, so its contents
-   are not compared — open the booking modal and `/book/` and confirm the
-   calendar loads.
+   are not compared — open `/book/` and confirm the calendar loads.
 
 ## Post-checks
 
