@@ -16,9 +16,9 @@
   <link rel="icon" href="/images/favicon-16x16.png" sizes="16x16" type="image/png">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
-  {{/* Booking CTAs are on every page and the modal only sets the iframe src on
-       click, so pay Avaros's DNS+TLS (90-170ms measured, #140) up front. */}}
-  {{ with .Site.Params.bookingURL }}{{ with urls.Parse . }}{{ if .Host }}<link rel="preconnect" href="{{ .Scheme }}://{{ .Host }}">{{ end }}{{ end }}{{ end }}
+  {{/* Only /book/ embeds Avaros: start its DNS+TLS (90-170ms measured, #140)
+       while the head is still parsing. */}}
+  {{ if eq .Layout "book" }}{{ with .Site.Params.bookingURL }}{{ with urls.Parse . }}{{ if .Host }}<link rel="preconnect" href="{{ .Scheme }}://{{ .Host }}">{{ end }}{{ end }}{{ end }}{{ end }}
 
   <!-- Open Graph -->
   <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}">
@@ -275,7 +275,6 @@
 
   {{ end }}
 
-  {{ partial "booking-modal.html" . }}
   {{ if ne .Layout "quiz" }}{{ partial "quiz-modal.html" . }}{{ end }}
 
   <script>
@@ -313,49 +312,15 @@
     hamburger && hamburger.addEventListener('click', openDrawer);
     drawerClose && drawerClose.addEventListener('click', closeDrawer);
 
-    // Booking modal
-    const bookingModal = document.getElementById('booking-modal');
-    const bookingURL   = bookingModal && bookingModal.dataset.bookingUrl;
-    const bookingFrame = bookingModal && bookingModal.querySelector('.modal__frame');
-
     // Avaros's load event fires once its shell's scripts run, before the app has
     // fetched availability and painted; it is cross-origin, so real readiness
     // can't be observed. Hold the loader a beat past load instead (#140).
     document.querySelectorAll('.booking-loading').forEach(loader => {
       const frame = loader.parentElement.querySelector('iframe');
       frame.addEventListener('load', () => {
-        // The modal iframe starts src-less; its about:blank can fire load too
-        if (!frame.getAttribute('src')) return;
         setTimeout(() => loader.classList.add('is-done'), 600);
       });
     });
-
-    function openBookingModal() {
-      // Close quiz modal first if it was the entry point
-      if (quizModal && !quizModal.hidden) { quizModal.hidden = true; if (typeof window.resetQuiz === 'function') window.resetQuiz(); }
-      if (bookingFrame && !bookingFrame.src) bookingFrame.src = bookingURL;
-      bookingModal.hidden = false;
-      document.body.style.overflow = 'hidden';
-      bookingModal.querySelector('.modal__close').focus();
-    }
-    window.openBookingModal = openBookingModal;
-
-    function closeBookingModal() {
-      bookingModal.hidden = true;
-      document.body.style.overflow = '';
-    }
-
-    if (bookingModal && bookingURL) {
-      document.querySelectorAll('a[href="' + bookingURL + '"]').forEach(link => {
-        link.addEventListener('click', e => {
-          e.preventDefault();
-          if (window.innerWidth <= 768) { window.location.href = '/book/'; }
-          else { openBookingModal(); }
-        });
-      });
-      bookingModal.querySelector('.modal__backdrop').addEventListener('click', closeBookingModal);
-      bookingModal.querySelector('.modal__close').addEventListener('click', closeBookingModal);
-    }
 
     // Quiz modal
     const quizModal = document.getElementById('quiz-modal');
@@ -390,7 +355,6 @@
     // Close on Escape
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
-        if (bookingModal && !bookingModal.hidden) { closeBookingModal(); return; }
         if (quizModal && !quizModal.hidden) { closeQuizModal(); return; }
         if (drawer && drawer.classList.contains('is-open')) closeDrawer();
       }

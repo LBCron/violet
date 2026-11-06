@@ -13,20 +13,12 @@ const openBookPage = async (page: Page) => {
   return '.book-page__frame';
 };
 
-// Desktop booking CTAs open the modal; phones (<=768px) navigate to /book/.
-const openModal = async (page: Page) => {
-  await page.goto('/');
-  await page.evaluate(() => (window as any).openBookingModal());
-  return '#booking-modal .modal__frame';
-};
-
 const CASES = [
   { name: 'iPhone SE 1st gen, /book/', viewport: { width: 320, height: 568 }, open: openBookPage },
   { name: 'iPhone SE 2nd/3rd gen, /book/', viewport: { width: 375, height: 667 }, open: openBookPage },
   { name: 'iPhone 16, /book/', viewport: { width: 393, height: 734 }, open: openBookPage },
   { name: 'desktop, /book/', viewport: { width: 1280, height: 800 }, open: openBookPage },
-  { name: 'desktop, booking modal', viewport: { width: 1280, height: 800 }, open: openModal },
-  { name: 'short laptop, booking modal', viewport: { width: 1366, height: 768 }, open: openModal },
+  { name: 'short laptop, /book/', viewport: { width: 1366, height: 768 }, open: openBookPage },
 ];
 
 for (const { name, viewport, open } of CASES) {

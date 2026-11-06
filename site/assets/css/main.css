@@ -1666,23 +1666,7 @@ p:last-child { margin-bottom: 0; }
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25);
 }
 
-/* Booking modal variant */
-
-.modal--booking .modal__panel {
-  position: relative;
-  width: min(660px, 96vw);
-  height: min(780px, 92vh);
-  height: min(780px, 92dvh);
-}
-
-.modal--booking .modal__frame {
-  flex: 1;
-  border: none;
-  width: 100%;
-  height: 100%;
-}
-
-/* Book page (mobile navigation target for booking CTAs) */
+/* Book page (every booking CTA leads here) */
 
 .book-page__wrap { position: relative; border-radius: var(--radius-lg); }
 

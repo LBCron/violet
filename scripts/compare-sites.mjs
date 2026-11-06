@@ -6,7 +6,7 @@
 //   npm run compare -- <before> <after>   # any two base URLs, e.g. local builds
 //
 // For every page in a11y/pages.ts plus a 404, at desktop and phone widths, and
-// with each modal open on the desktop homepage, it records every element's box
+// with the quiz modal open on the desktop homepage, it records every element's box
 // size and the computed properties in PROPS, skipping the staging banner, then
 // prints the differences grouped by element and change. Screenshots of every
 // state go to test-results/compare/ for eyeballing.
@@ -26,11 +26,10 @@ const OUT = fileURLToPath(new URL('../test-results/compare/', import.meta.url));
 
 const ROUTES = [...PAGES, '/no-such-page/'];
 const VIEWPORTS = { desktop: { width: 1280, height: 900 }, phone: { width: 375, height: 812 } };
-// Extra states, checked on the desktop homepage only: the modals are the same
-// partials on every page. Each returns false where it can't apply (the
+// Extra states, checked on the desktop homepage only: the modal is the same
+// partial on every page. Each returns false where it can't apply (the
 // maintenance placeholder has no quiz), and that state is then skipped.
 const STATES = {
-  bookingModal: () => typeof window.openBookingModal === 'function' && (window.openBookingModal(), true),
   quizModal: () => { const t = document.querySelector('[data-quiz-trigger]'); return !!t && (t.click(), true); },
 };
 const PROPS = ['display', 'position', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',

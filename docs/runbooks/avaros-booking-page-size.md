@@ -3,7 +3,7 @@
 Keeps the "Book an appointment" button visible when Avaros's booking page
 grows.
 
-The booking form on `/book/` (and in the desktop modal) is an iframe of
+The booking form on `/book/` is an iframe of
 Avaros's booking page, whose content is edited in Avaros, not here. If that
 page grows — longer welcome text, a bigger logo — its button can drop below or
 past the frame's edge, where phone visitors won't find it
@@ -29,9 +29,8 @@ verdict on it as a reminder.
 
 1. Check out the PR's branch.
 2. Adjust the frame in `site/assets/css/main.css` until the booking tests pass:
-   - **The button fell below the bottom edge:** raise the frame's height —
-     `.book-page__frame` for `/book/`, `.modal--booking .modal__panel` for the
-     modal.
+   - **The button fell below the bottom edge:** raise
+     `.book-page__frame`'s height.
    - **The button overhangs the right edge** (Avaros's minimum width grew): move
      the edge-to-edge breakpoint below it.
 3. Run the booking tests (they need the dev server; `./validate.sh` starts it):
@@ -44,7 +43,7 @@ verdict on it as a reminder.
    staging embeds the real Avaros page, so it is the only place the fit can be
    confirmed before release.
    [Deploy the branch](deploying-to-staging.md) to the default slot, then open
-   `/book/` and the desktop booking modal on a phone and on desktop. The button
+   `/book/` on a phone and on desktop. The button
    must be visible without scrolling inside the frame.
 5. Merge, then [cut a release](cutting-a-release.md).
 

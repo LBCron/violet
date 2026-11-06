@@ -56,7 +56,6 @@
   if (!data) return;
   var questions   = data.questions;
   var results     = data.results;
-  var bookingURL  = {{ .Site.Params.bookingURL | default "#book" | jsonify | safeJS }};
 
   var quizEl      = document.getElementById('quiz');
   var startEl     = quizEl.querySelector('.quiz__start');
@@ -202,22 +201,10 @@
 
     resultTextEl.textContent = result.text;
 
-    // Booking CTA - created dynamically so it post-dates the page-load click interceptor;
-    // handle the modal/tab decision here rather than relying on the global interceptor.
     var cta = document.createElement('a');
     cta.className = 'quiz__result-cta btn btn--primary';
-    cta.href = bookingURL;
+    cta.href = '/book/';
     cta.textContent = result.call_to_action;
-    cta.addEventListener('click', function (e) {
-      if (window.innerWidth > 768 && typeof window.openBookingModal === 'function') {
-        e.preventDefault();
-        window.openBookingModal();
-      } else if (window.innerWidth <= 768) {
-        // Mobile: use the wrapped /book/ page instead of the raw Avaros URL
-        e.preventDefault();
-        window.location.href = '/book/';
-      }
-    });
     resultTextEl.insertAdjacentElement('afterend', cta);
 
     resultEl.hidden = false;
