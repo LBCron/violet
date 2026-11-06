@@ -32,6 +32,7 @@ Andrea, Nurse Practitioner, provides clinical support and treatment for perimeno
 
 ## Get Started
 
+- [Is HRT Right for Me?]({{ .Site.BaseURL }}quiz/): A short quiz on whether hormone replacement therapy may suit you, with suggested next steps.
 - [Book a Visit]({{ .Site.BaseURL }}book/): New patients book a free 15-minute Discovery Call - the first step for every new patient. Existing patients book any visit type online.
 
 ## Contact
