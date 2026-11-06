@@ -317,4 +317,5 @@ Both production and preview environments are configured identically, except whil
 | `HUGO_VERSION` | Bare `X.Y.Z` (value in the export) — Cloudflare adds the `extended_` prefix. Must match `.tool-versions` on the branch being built: this value decides which Hugo the build image installs, and asdf then runs the version `.tool-versions` names, failing with "No preset version installed for command hugo" if the two differ. Bump Preview when the `.tool-versions` change merges, Production when it is released; see the header of `.tool-versions`. |
 | `HUGO_PARAMS_BOOKINGURL` | _(secret — see `.env.local.example`)_ |
 | `HUGO_PARAMS_INFOCONTACTEMAIL` | _(secret — see `.env.local.example`)_ |
+| `HUGO_PARAMS_INFOCONTACTPHONE` | _(secret — see `.env.local.example`)_ |
 | `HUGO_PARAMS_PRIVACYCONTACTEMAIL` | _(secret — see `.env.local.example`)_ |
