@@ -26,10 +26,12 @@ The export also **probes for features nobody recorded** (email routing, page rul
 | CNAME | `staging` | `staging.violet-6qt.pages.dev` | **Yes (required)** | Auto |
 | CNAME | `autodiscover` | `autodiscover.outlook.com` | No | 3600 |
 | CNAME | `selector1._domainkey` | `selector1-ontariomenopauseclinic-ca._domainkey.ontariomenopauseclinic.a-v1.dkim.mail.microsoft` | No | Auto |
+| CNAME | `4c2a2c0a2413e7ec9186152562a7c3d7` | `verify.bing.com` (Bing Webmaster Tools verification; see [Search Engines](search-engines.md)) | No | Auto |
 | CNAME | `selector2._domainkey` | `selector2-ontariomenopauseclinic-ca._domainkey.ontariomenopauseclinic.a-v1.dkim.mail.microsoft` | No | Auto |
 | MX | `ontariomenopauseclinic.ca` | `ontariomenopauseclinic-ca.mail.protection.outlook.com` | No | 3600 |
 | TXT | `ontariomenopauseclinic.ca` | `v=spf1 include:spf.protection.outlook.com ~all` | No | 3600 |
 | TXT | `ontariomenopauseclinic.ca` | `MS=ms74690258` (Microsoft domain verification) | No | 3600 |
+| TXT | `ontariomenopauseclinic.ca` | `google-site-verification=…` (Google Search Console domain verification; value in the export; see [Search Engines](search-engines.md)) | No | value in the export |
 | TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:cea6b6a7fa294e928c7497395cfd0d92@dmarc-reports.cloudflare.net` | No | Auto |
 
 ### Notes

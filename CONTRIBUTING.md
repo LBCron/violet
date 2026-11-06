@@ -107,6 +107,11 @@ cannot reproduce:
   environment variables: [`cloudflare-config.md`](docs/current-state/cloudflare-config.md).
 - **GitHub** — branch rulesets, merge settings, Actions permissions and the
   Cloudflare Pages integration: [`github-config.md`](docs/current-state/github-config.md).
+- **Search engines** — the Google and Bing properties, how they are verified,
+  and which reported findings are expected: [`search-engines.md`](docs/current-state/search-engines.md).
+  This is state the site produces and search engines observe, not dashboard
+  configuration, and it has no export yet
+  ([#221](https://github.com/timgladwell/violet/issues/221)).
 
 Each says **what** the state is, why, and how to change it without breaking
 something. Each has an export beside it (`cloudflare-export/`,
