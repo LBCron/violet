@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="build" content="{{ partial "build-id.html" . }}">
 
-  {{ if or (eq hugo.Environment "staging") .Site.Params.maintenanceMode .Params.noindex }}<meta name="robots" content="noindex, nofollow">{{ end }}
+  {{/* Only staging and the maintenance placeholder stay out of indexes; every
+       real page is meant to be found ("SEO/GEO always wins" in CLAUDE.md). */}}
+  {{ if or (eq hugo.Environment "staging") .Site.Params.maintenanceMode }}<meta name="robots" content="noindex, nofollow">{{ end }}
 
   <title>{{ if .IsHome }}{{ .Site.Title }} - Expert Menopause Care in Ontario{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
