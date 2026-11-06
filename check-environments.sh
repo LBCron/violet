@@ -6,7 +6,9 @@
 # simulating CF_PAGES_BRANCH), development directly via hugo — and asserts
 # each one produces the expected output (staging banner/noindex/disallow,
 # production maintenance placeholder/noindex, development with none of the
-# above, no RSS feed anywhere).
+# above, no RSS feed anywhere). The development build is also checked for
+# internal links without a trailing slash, which cost a redirect hop and show
+# up in Search Console as extra URLs.
 #
 # Building through build.sh means a typo'd --environment value or branch
 # pattern inside it fails this check, instead of silently falling back to
@@ -47,6 +49,14 @@ build_direct() {
   hugo build site --source site --environment "$1" --logLevel warn >/dev/null
 }
 
+# Internal page links (href="/x" or JS location.href = '/x') that end in
+# neither "/" nor a file extension. Cloudflare Pages 308s them to the slashed
+# URL, so each is a wasted hop and a second URL for crawlers to report.
+slashless_links() {
+  grep -rhoE "(href=\"|location\.href = ')/[A-Za-z0-9/_.-]*" site/public --include='*.html' \
+    | sed -E 's|^[^/]*||' | grep -vE '/$|\.[A-Za-z0-9]+$' | sort -u || true
+}
+
 echo "── development"
 build_direct development
 check "no staging banner"   "! grep -q staging-banner site/public/index.html"
@@ -55,6 +65,8 @@ check "robots.txt allows"   "grep -q 'Allow: /' site/public/robots.txt"
 check "llms.txt lists pages" "grep -q '^- \[' site/public/llms.txt"
 check "JSON-LD present"     "grep -q 'application/ld+json' site/public/index.html"
 check "no RSS feed"         "[ ! -f site/public/index.xml ]"
+check "internal links end in /" "[ -z \"\$(slashless_links)\" ]"
+slashless_links | sed 's/^/      slashless: /'
 
 echo "── staging (via build.sh, CF_PAGES_BRANCH=staging)"
 build_via_buildsh staging

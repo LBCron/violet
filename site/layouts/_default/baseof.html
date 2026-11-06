@@ -393,7 +393,7 @@
     document.querySelectorAll('[data-quiz-trigger]').forEach(el => {
       el.addEventListener('click', e => {
         e.preventDefault();
-        if (window.innerWidth <= 768) { window.location.href = '/quiz'; }
+        if (window.innerWidth <= 768) { window.location.href = '/quiz/'; }
         else { openQuizModal(); }
       });
     });
