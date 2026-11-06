@@ -35,6 +35,11 @@
   <meta name="twitter:image" content="{{ "images/og-image.png" | absURL }}">
 
   {{/* Service names/prices/descriptions below are duplicated from layouts/_default/services.html by deliberate SEO/GEO choice (see "SEO/GEO always wins" in CLAUDE.md) - keep both in sync when services change. */}}
+  {{/* Check changes with the schema.org validator (validator.schema.org) on
+       staging: it should report no errors or warnings. MedicalClinic, not
+       MedicalBusiness, because only the former accepts medicalSpecialty, whose
+       values must be schema.org MedicalSpecialty members. Services have no
+       duration property, so each visit's length is in its Offer description. */}}
   {{/* Staging deliberately emits this too: structured data is how integrators,
        search engines, and LLMs see the site, so it has to be verifiable before
        it reaches production. Staging is kept out of indexes by noindex,
@@ -43,7 +48,7 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "MedicalBusiness",
+    "@type": "MedicalClinic",
     "name": {{ .Site.Title }},
     "url": {{ .Site.BaseURL }},
     "logo": {{ "images/apple-touch-icon.png" | absURL }},
@@ -69,7 +74,7 @@
         "email": {{ .Site.Params.privacyContactEmail }}
       }
     ],
-    "medicalSpecialty": ["Gynecology", "Endocrinology"],
+    "medicalSpecialty": ["https://schema.org/Gynecologic", "https://schema.org/Endocrine"],
     "areaServed": {
       "@type": "State",
       "name": "Ontario",
@@ -120,96 +125,66 @@
           "@type": "Offer",
           "price": "0.00",
           "priceCurrency": "CAD",
+          "description": "15 minutes",
           "itemOffered": {
             "@type": "Service",
             "name": "Discovery Call",
-            "duration": "PT15M",
-            "description": "A brief, no-pressure call for women who want to understand if this approach is the right fit for them.",
-            "location": {
-              "@type": "VirtualLocation",
-              "name": "Secure Telehealth Video Platform",
-              "url": {{ .Site.BaseURL }}
-            }
+            "description": "A brief, no-pressure call for women who want to understand if this approach is the right fit for them."
           }
         },
         {
           "@type": "Offer",
           "price": "299.00",
           "priceCurrency": "CAD",
+          "description": "60 minutes",
           "itemOffered": {
             "@type": "MedicalProcedure",
             "name": "Initial Consultation",
-            "duration": "PT60M",
-            "description": "A comprehensive assessment for women experiencing perimenopausal or menopausal symptoms who are looking for a clear, personalized plan.",
-            "location": {
-              "@type": "VirtualLocation",
-              "name": "Secure Telehealth Video Platform",
-              "url": {{ .Site.BaseURL }}
-            }
+            "description": "A comprehensive assessment for women experiencing perimenopausal or menopausal symptoms who are looking for a clear, personalized plan."
           }
         },
         {
           "@type": "Offer",
           "price": "150.00",
           "priceCurrency": "CAD",
+          "description": "30 minutes",
           "itemOffered": {
             "@type": "MedicalProcedure",
             "name": "Follow-Up Visit",
-            "duration": "PT30M",
-            "description": "Ongoing care for patients who have already started treatment and need support, adjustments, or monitoring.",
-            "location": {
-              "@type": "VirtualLocation",
-              "name": "Secure Telehealth Video Platform",
-              "url": {{ .Site.BaseURL }}
-            }
+            "description": "Ongoing care for patients who have already started treatment and need support, adjustments, or monitoring."
           }
         },
         {
           "@type": "Offer",
           "price": "75.00",
           "priceCurrency": "CAD",
+          "description": "15 minutes",
           "itemOffered": {
             "@type": "MedicalProcedure",
             "name": "Care Check-In",
-            "duration": "PT15M",
-            "description": "A shorter visit for existing patients who need quick support between scheduled appointments.",
-            "location": {
-              "@type": "VirtualLocation",
-              "name": "Secure Telehealth Video Platform",
-              "url": {{ .Site.BaseURL }}
-            }
+            "description": "A shorter visit for existing patients who need quick support between scheduled appointments."
           }
         },
         {
           "@type": "Offer",
           "price": "150.00",
           "priceCurrency": "CAD",
+          "description": "30 minutes",
           "itemOffered": {
             "@type": "MedicalProcedure",
             "name": "Weight Loss Initial Consultation",
-            "duration": "PT30M",
-            "description": "A personalized consultation for women experiencing weight or metabolic changes, particularly during perimenopause and menopause.",
-            "location": {
-              "@type": "VirtualLocation",
-              "name": "Secure Telehealth Video Platform",
-              "url": {{ .Site.BaseURL }}
-            }
+            "description": "A personalized consultation for women experiencing weight or metabolic changes, particularly during perimenopause and menopause."
           }
         },
         {
           "@type": "Offer",
           "price": "99.00",
           "priceCurrency": "CAD",
+          "description": "20 minutes",
           "itemOffered": {
             "@type": "MedicalProcedure",
             "name": "Weight Loss Follow-Up",
-            "duration": "PT20M",
-            "description": "Ongoing support to help you stay on track with your plan and make adjustments as needed.",
-            "location": {
-              "@type": "VirtualLocation",
-              "name": "Secure Telehealth Video Platform",
-              "url": {{ .Site.BaseURL }}
-            }
+            "description": "Ongoing support to help you stay on track with your plan and make adjustments as needed."
           }
         },
         {
@@ -222,12 +197,7 @@
           "itemOffered": {
             "@type": "Service",
             "name": "Form Completion",
-            "description": "Completion of medical forms or documentation based on time and complexity.",
-            "location": {
-              "@type": "VirtualLocation",
-              "name": "Secure Telehealth Video Platform",
-              "url": {{ .Site.BaseURL }}
-            }
+            "description": "Completion of medical forms or documentation based on time and complexity."
           }
         }
       ]
