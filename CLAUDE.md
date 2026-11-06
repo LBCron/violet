@@ -143,7 +143,7 @@ docs/
   adr/                                            # One target design per product problem (README.md has the format)
   runbooks.md                                     # Index of runbooks, by kind
   runbooks/                                       # One procedure per file (releasing, maintenance mode, ...)
-  current-state/                                  # State code does not define: Cloudflare and GitHub, each a *-config.md (why) and *-export/ (generated)
+  current-state/                                  # State code does not define: Cloudflare and GitHub, each a *-config.md (why) and *-export/ (generated); search-engines.md (how Google and Bing see the site)
   legacy/                                         # Frozen pre-convention docs (original requirements, decision log, early research, content drafts); reference only
 site/                                             # Hugo-based website
 ```
