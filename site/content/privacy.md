@@ -1,6 +1,6 @@
 ---
 title: "Privacy Policy"
-description: "Learn how Ontario Menopause Clinic collects, uses, and protects your personal information."
+description: "How Ontario Menopause Clinic collects, uses, shares and protects your personal information, how our website uses cookies, and your rights over your data."
 layout: "legal"
 sitemap:
   priority: 0.3

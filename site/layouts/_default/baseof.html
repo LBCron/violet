@@ -7,7 +7,7 @@
 
   {{ if or (eq hugo.Environment "staging") .Site.Params.maintenanceMode .Params.noindex }}<meta name="robots" content="noindex, nofollow">{{ end }}
 
-  <title>{{ if .IsHome }}{{ .Site.Title }} - Expert Menopause Care in Ontario{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+  <title>{{ if .IsHome }}{{ .Site.Title }} | Virtual Menopause Care, No Referral{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
 
   <link rel="canonical" href="{{ .Permalink }}">
@@ -70,11 +70,19 @@
       "addressCountry": "CA"
     },
     "sameAs": ["https://www.instagram.com/andreamarshnp/"],
+    "priceRange": "$75-$299",
     "employee": {
       "@type": "Person",
       "name": "Andrea Marsh",
       "jobTitle": "Nurse Practitioner",
-      "honorificSuffix": "NP, NCMP",
+      "honorificSuffix": "NP, MSCP",
+      {{/* Profiles that independently confirm who Andrea is (#188). The CNO
+           register entry is a stable permalink, not a search URL. */}}
+      "sameAs": [
+        "https://registry.cno.org/Search/Details/a2455ae3-e103-434b-8591-30995db07bdb",
+        "https://www.linkedin.com/in/andrea-marsh-047245b4/",
+        "https://www.instagram.com/andreamarshnp/"
+      ],
       "description": "The Menopause Society Certified Practitioner with over 20 years of clinical experience.",
       "alumniOf": [
         {
