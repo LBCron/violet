@@ -51,4 +51,9 @@ updates, an **"Avaros booking page changed size"** PR.
 1. **Production's `/book/` shows the button** on a phone without scrolling
    inside the frame.
 
-To measure the page by hand: `npm run avaros:measure -- <booking URL>`.
+To re-measure on demand, run the workflow by hand:
+`gh workflow run booking-check.yml`. `npm run avaros:measure -- <booking URL>`
+works locally for a look, but don't commit its fixture: fonts differ from the
+workflow's Ubuntu runner, so text wraps differently at some widths and the next
+daily run opens a PR to undo it
+([#183](https://github.com/timgladwell/violet/pull/183)).

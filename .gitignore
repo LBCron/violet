@@ -9,8 +9,9 @@ public/
 # Hugo module cache
 .hugo_build.lock
 
-# Dev server ownership lock (see dev-server.sh)
+# Dev server ownership lock and log (see dev-server.sh)
 .dev-server.lock
+.dev-server.log
 
 # OS
 .DS_Store

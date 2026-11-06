@@ -7,6 +7,10 @@
 //
 // Exits 0 whether or not anything changed (prints "changed"/"unchanged");
 // exits 1 without touching the fixture if any width fails to measure.
+//
+// Commit only fixtures measured by booking-check.yml: text wraps differently
+// under other OSes' fonts, so a locally measured fixture is undone by the next
+// daily run (#183).
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 
