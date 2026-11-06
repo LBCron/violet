@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 # dev-server.sh
 #
-# Builds the site and starts the Hugo development server in a tmux session.
-# Attaches to an existing session if one is already running.
+# Starts the Hugo development server on http://localhost:1313.
 #
-# Ownership: a session this script starts gets a lock file (.dev-server.lock).
-# --stop only kills the session if that lock is present, so it never kills a
-# server someone else started.
+# Ownership: a background server this script starts records its PID in
+# .dev-server.lock (output in .dev-server.log). --stop only kills that PID, so
+# it never kills a server someone else started. A server already answering on
+# the port is left alone and reused.
 #
 # USAGE:
-#   ./dev-server.sh        — build, start server (or attach if already running)
-#   ./dev-server.sh --ci   — ensure server is running headlessly, no attach
-#   ./dev-server.sh --stop — stop the server, but only if this script started it
+#   ./dev-server.sh        — run the server in this terminal (Ctrl-C stops it)
+#   ./dev-server.sh --ci   — ensure a server is running in the background
+#   ./dev-server.sh --stop — stop the background server, if this script started it
 
 set -euo pipefail
 
@@ -23,12 +23,15 @@ esac
 
 PORT=1313
 URL="http://localhost:${PORT}"
-SESSION="violet-localdev"
 LOCK=".dev-server.lock"
+LOG=".dev-server.log"
 
-# Load env so it's inherited by the tmux session and the hugo server process
+# Load env so it's inherited by the hugo server process
+# Placeholders from .env.local.example are enough to build and test (as in CI),
+# so a fresh worktree without .env.local still works.
+ENV_FILE=.env.local; [ -f "$ENV_FILE" ] || ENV_FILE=.env.local.example
 # shellcheck disable=SC1091
-[ -f .env.local ] && set -a && source .env.local && set +a
+set -a && source "$ENV_FILE" && set +a
 
 if [ -f .tool-versions ] && command -v hugo >/dev/null 2>&1; then
   # .tool-versions pins "extended_X.Y.Z" (Cloudflare's asdf preset name), but
@@ -40,58 +43,49 @@ if [ -f .tool-versions ] && command -v hugo >/dev/null 2>&1; then
   fi
 fi
 
+serving() { curl -s --max-time 1 "$URL" > /dev/null 2>&1; }
+
 if [ "$MODE" = "stop" ]; then
-  if ! tmux has-session -t "$SESSION" 2>/dev/null; then
-    echo "No '$SESSION' session running."
+  if [ ! -f "$LOCK" ]; then
+    echo "No server started by this script here."
     exit 0
   fi
-  if [ -f "$LOCK" ]; then
-    tmux kill-session -t "$SESSION"
-    rm -f "$LOCK"
-    echo "Stopped '$SESSION'."
-    exit 0
+  PID=$(cat "$LOCK")
+  # Check the PID is still hugo, in case it exited and the number was reused.
+  if ps -p "$PID" -o comm= 2>/dev/null | grep -q hugo; then
+    kill "$PID"
+    echo "Stopped dev server (pid $PID)."
+  else
+    echo "Dev server (pid $PID) had already exited."
   fi
-  echo "'$SESSION' wasn't started by this tooling, not stopping it." >&2
-  exit 1
-fi
-
-if [ "$MODE" = "interactive" ]; then
-  BRANCH=$(git rev-parse --abbrev-ref HEAD)
-  WORKTREE=$(basename "$(git rev-parse --show-toplevel)")
-  echo "Branch:   $BRANCH"
-  echo "Worktree: $WORKTREE"
-  echo "URL:      $URL"
-  echo ""
-fi
-
-if tmux has-session -t "$SESSION" 2>/dev/null; then
-  if [ "$MODE" = "ci" ]; then
-    exit 0
-  fi
-  echo "Attaching to existing '$SESSION' session..."
-  tmux attach-session -t "$SESSION"
+  rm -f "$LOCK"
   exit 0
 fi
 
-HUGO_CMD="hugo server --source site --environment development --logLevel debug --port $PORT --disableFastRender"
-WINDOW_NAME="dev-server: $(git rev-parse --abbrev-ref HEAD) [$(basename "$(git rev-parse --show-toplevel)")]"
+if serving; then
+  echo "A server is already running at $URL; using it."
+  exit 0
+fi
 
-tmux new-session -d -s "$SESSION" -x 220 -y 50
-tmux send-keys -t "$SESSION" "$HUGO_CMD" Enter
-tmux rename-window -t "$SESSION" "$WINDOW_NAME"
-tmux split-window -t "$SESSION" -h -l 75%
-echo "$SESSION" > "$LOCK"
+HUGO_CMD=(hugo server --source site --environment development --logLevel debug --port "$PORT" --disableFastRender)
 
 if [ "$MODE" = "ci" ]; then
+  nohup "${HUGO_CMD[@]}" > "$LOG" 2>&1 &
+  echo $! > "$LOCK"
   echo "Waiting for server at $URL..."
-  for i in $(seq 1 15); do
-    curl -s --max-time 1 "$URL" > /dev/null 2>&1 && echo "Server ready." && exit 0
+  for _ in $(seq 1 30); do
+    serving && echo "Server ready." && exit 0
+    kill -0 "$(cat "$LOCK")" 2>/dev/null || break
     sleep 1
   done
-  echo "Error: server did not start in time." >&2
+  echo "Error: server did not start; last lines of $LOG:" >&2
+  tail -n 10 "$LOG" >&2
+  rm -f "$LOCK"
   exit 1
 fi
 
-echo "Started tmux session '$SESSION'. Attaching..."
-(sleep 1 && open "$URL") &
-tmux attach-session -t "$SESSION"
+echo "Branch: $(git rev-parse --abbrev-ref HEAD)"
+echo "URL:    $URL"
+echo ""
+(sleep 2 && open "$URL") &
+exec "${HUGO_CMD[@]}"

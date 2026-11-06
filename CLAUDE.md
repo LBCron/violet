@@ -86,7 +86,7 @@ All local development is managed through these scripts. Do not construct raw `hu
 
 | Script | Purpose |
 |--------|---------|
-| `./dev-server.sh` | Build and start the Hugo dev server in a tmux session (`violet-localdev`). Attaches if already running. Requires tmux (`brew install tmux`). |
+| `./dev-server.sh` | Run the Hugo dev server on `localhost:1313` in this terminal (Ctrl-C stops it). `--ci` starts it in the background instead; `--stop` stops that. |
 | `./validate.sh` | Full validation suite: build + environment checks + markdown lint + a11y. Starts the dev server automatically if needed, stops it when done. |
 | `./check-environments.sh` | Builds development/staging/production (staging and production via `site/build.sh`, simulating Cloudflare's `CF_PAGES_BRANCH`) and asserts each produces the expected output. Catches a typo'd `--environment` value before it ships. Runs in CI on every PR (`.github/workflows/check-environments.yml`). |
 | `./deploy-staging.sh <slug>` | Push current branch to a staging environment. |
@@ -96,7 +96,7 @@ All local development is managed through these scripts. Do not construct raw `hu
 | `./export-github.sh` | The same for GitHub (rulesets, merge and Actions settings) into `docs/current-state/github-export/`, using your `gh` login. Run it after **any** change in the repo's Settings. |
 
 * **Before pushing a PR**, run `./validate.sh` and fix any failures.
-* **If you start the dev server** (`./dev-server.sh`), stop it before exiting by running `./dev-server.sh --stop`. This is ownership-safe: it only stops a session `dev-server.sh` itself started (tracked via `.dev-server.lock`), so it will never kill a server someone else already had running.
+* **If you start the dev server** (`./dev-server.sh --ci`), stop it before exiting by running `./dev-server.sh --stop`. This is ownership-safe: it only stops a server `dev-server.sh` itself started (its PID is in `.dev-server.lock`), so it will never kill a server someone else already had running.
 * **A11y only**: `npm run a11y` (requires dev server running first). One-time setup on a new machine: `npx playwright install chromium`.
 * **Markdown lint only**: `npm run lint:md`.
 * **Compare two deployments**: `npm run compare` (production vs default staging) or `npm run compare -- <before> <after>`. Element-by-element computed-style diff; see [Testing Changes Before Release](docs/runbooks/testing-changes-before-release.md).

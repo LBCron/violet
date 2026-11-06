@@ -17,8 +17,11 @@
 
 set -euo pipefail
 
+# Placeholders from .env.local.example are enough to build and test (as in CI),
+# so a fresh worktree without .env.local still works.
+ENV_FILE=.env.local; [ -f "$ENV_FILE" ] || ENV_FILE=.env.local.example
 # shellcheck disable=SC1091
-[ -f .env.local ] && set -a && source .env.local && set +a
+set -a && source "$ENV_FILE" && set +a
 
 PASS=0
 FAIL=0
