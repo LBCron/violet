@@ -1,6 +1,6 @@
 ---
 title: "Medical Disclaimer"
-description: "Important information about the nature of content and services provided by Ontario Menopause Clinic."
+description: "What Ontario Menopause Clinic's website and virtual menopause care can and can't do: general health information, not medical advice, and not emergency care."
 layout: "legal"
 sitemap:
   priority: 0.3
