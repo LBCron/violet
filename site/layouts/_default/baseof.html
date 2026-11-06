@@ -50,6 +50,25 @@
     "image": {{ "images/og-image.png" | absURL }},
     "description": {{ .Site.Params.description }},
     "email": {{ .Site.Params.infoContactEmail }},
+    {{- with .Site.Params.infoContactPhone }}
+    "telephone": {{ printf "+1-%s" . }},
+    {{- end }}
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        {{- with .Site.Params.infoContactPhone }}
+        "telephone": {{ printf "+1-%s" . }},
+        {{- end }}
+        "email": {{ .Site.Params.infoContactEmail }},
+        "areaServed": "CA-ON"
+      },
+      {
+        "@type": "ContactPoint",
+        "contactType": "privacy",
+        "email": {{ .Site.Params.privacyContactEmail }}
+      }
+    ],
     "medicalSpecialty": ["Gynecology", "Endocrinology"],
     "areaServed": {
       "@type": "State",

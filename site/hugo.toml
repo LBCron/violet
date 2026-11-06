@@ -27,6 +27,7 @@ locale = 'en-CA'
   bookingURL = ''           # Set via HUGO_PARAMS_BOOKINGURL env var — see .env.local.example
   infoContactEmail = ''     # Set via HUGO_PARAMS_INFOCONTACTEMAIL env var — see .env.local.example
   privacyContactEmail = ''  # Set via HUGO_PARAMS_PRIVACYCONTACTEMAIL env var — see .env.local.example
+  infoContactPhone = ''     # Set via HUGO_PARAMS_INFOCONTACTPHONE env var — see .env.local.example
 
   maintenanceMode = false   # Display the maintenance placeholder instead of the site
 

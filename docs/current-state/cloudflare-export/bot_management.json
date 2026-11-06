@@ -8,6 +8,13 @@
     "ai_training": "disabled",
     "ai_search": "disabled",
     "ai_user": "disabled",
+    "ai_agents": {
+      "anthropic_agent": "disabled",
+      "google_agent": "disabled",
+      "instinct": "disabled",
+      "muse": "disabled",
+      "openai_agent": "disabled"
+    },
     "is_robots_txt_managed": false,
     "bot_preference_sync_enabled": false,
     "cf_robots_variant": "policy_only",

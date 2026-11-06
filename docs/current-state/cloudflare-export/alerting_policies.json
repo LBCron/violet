@@ -1,0 +1,40 @@
+{
+  "result": [
+    {
+      "id": "7098b637c155414a8121eae72bae8acf",
+      "name": "Users without multi-factor authentication detected",
+      "description": "A user with no MFA configured was detected",
+      "enabled": true,
+      "alert_type": "security_insights_alert",
+      "created": "2026-11-05T21:39:35.475038Z",
+      "modified": "2026-11-05T21:39:35.475038Z",
+      "filters": {
+        "insight_class": [
+          "mfa_not_enabled"
+        ]
+      }
+    },
+    {
+      "id": "1fba9676a20a4f41811e2938bef48328",
+      "name": "ontariomenopauseclinic.ca deployment update",
+      "enabled": true,
+      "alert_type": "pages_event_alert",
+      "created": "2026-11-05T21:47:07.699622Z",
+      "modified": "2026-11-05T21:47:07.699622Z",
+      "filters": {
+        "environment": [
+          "ENVIRONMENT_PRODUCTION"
+        ],
+        "event": [
+          "EVENT_DEPLOYMENT_FAILED",
+          "EVENT_DEPLOYMENT_SUCCESS"
+        ],
+        "project_id": [
+          "778d19cd-b951-4d9c-bd22-af5f5036ea9b"
+        ]
+      }
+    }
+  ],
+  "success": true,
+  "errors": []
+}
