@@ -100,7 +100,9 @@ Every Cloudflare bot and AI-crawler control is **off**: Bot Fight Mode, AI-bot
 blocking, crawler protection, and the AI training, search and user-agent
 settings (`bot_management.json`). Cloudflare's managed `robots.txt` is off
 too, so the `robots.txt` crawlers see is the one the site builds from
-`site/layouts/robots.txt`.
+`site/layouts/robots.txt`. That includes the per-agent AI switches
+(`ai_agents`: Anthropic, Google, OpenAI and others), a Cloudflare beta, all
+`disabled`.
 
 This matches the requirement that the site be indexable by search and AI
 crawlers alike ("SEO/GEO always wins" in `CLAUDE.md`). Turning any of these on would
@@ -149,6 +151,19 @@ for the crawler-readiness work.
   nothing answers at that address) instead of quietly serving a second copy of
   the site. Silent duplicate `www` content is what GSC flagged in the first
   place, so the noisy failure is the one worth having.
+
+## Notifications
+
+Two notification policies exist. **Both are an experiment**, created to see
+what Cloudflare's notifications can do and how they might be used. Nothing
+relies on them, and they are not the alerting
+[#192](https://github.com/timgladwell/violet/issues/192) asks for. Who they
+notify is not in the export. `alerting_policies.json`.
+
+| Policy | Type | Enabled |
+|---|---|---|
+| Users without multi-factor authentication detected | `security_insights_alert` | yes |
+| ontariomenopauseclinic.ca deployment update | `pages_event_alert` | yes |
 
 ## Zone Settings
 
