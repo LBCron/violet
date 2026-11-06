@@ -32,7 +32,7 @@ Andrea, Nurse Practitioner, provides clinical support and treatment for perimeno
 
 ## Get Started
 
-- [Book a Visit]({{ .Site.BaseURL }}book/): Book a free 15-minute Discovery Call - the first step for every new patient.
+- [Book a Visit]({{ .Site.BaseURL }}book/): New patients book a free 15-minute Discovery Call - the first step for every new patient. Existing patients book any visit type online.
 
 ## Contact
 
